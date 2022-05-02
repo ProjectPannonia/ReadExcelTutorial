@@ -73,14 +73,14 @@ namespace ReadExcel
             wb = excel.Workbooks.Open(filePath);
             ws = wb.Worksheets[7];
 
-            Range cell = ws.Range["B23:D23"];
+            Range cell = ws.Range["B23:H23"];
             List<int> dates = new List<int>();
 
             foreach (int Result in cell.Value)
             {
+                MessageBox.Show(Result.ToString());
                 dates.Add(Result);
             }
-
 
             Workday workday = new Workday(dates);
             workday.WriteToConsole();

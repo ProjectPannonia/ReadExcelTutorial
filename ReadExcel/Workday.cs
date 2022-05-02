@@ -1,31 +1,40 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace ReadExcel
 {
     public class Workday
     {
-        public int Year { get; set; }
-        public int Month { get; set; }
-        public int Day { get; set; }
+        public Date Date { get; set; }
+        public FieldWork FieldWork { get; set; }
+        private List<int> dateList;
+        private List<int> workdayInfo;
 
-        public int FieldWorkStart { get; set; }
-        public int FieldWorkEnd { get; set; }
 
-        public int WorkStart { get; set; }
-        public int WorkEnd { get; set; }
-
-        public Workday(List<int> dates)
+        public Workday(List<int> dataList)
         {
-            MessageBox.Show(dates.Count.ToString());
-            Year = dates[0];
-            Month = dates[1];
-            Day = dates[2];
+            dateList = new List<int>();
+            workdayInfo = new List<int>();
+            SeparateLists(dataList);
+            Date = new Date(dateList);
+            FieldWork = new FieldWork(workdayInfo);
         }
+        private void SeparateLists(List<int> dataList)
+        {
+            int counter = 0;
 
+            foreach(int item in dataList)
+            {
+                if(counter < 3)
+                    dateList.Add(item);
+                else
+                    workdayInfo.Add(item);
+                counter++;
+            }
+        }
         public void WriteToConsole()
         {
-            MessageBox.Show($"Year: {Year}, Month: {Month}, Day: {Day}");
+            Date.ShowDate();
+            FieldWork.Show();
         }
     }
 }
