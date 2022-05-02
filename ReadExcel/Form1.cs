@@ -14,24 +14,64 @@ namespace ReadExcel
 
         private void read_Click(object sender, EventArgs e)
         {
-            ReadExcelWithRangeAndUseWorkdayObj();
+            //ReadExcelWithRangeAndUseWorkdayObj();
+            ReadExcel();
+
+            string[] fieldworkTime = ReadExcelGetFieldWorkTime();
+
+        }
+        private string[] ReadExcelGetFieldWorkTime()
+        {
+            string filePath = @"C:\test.xlsx";
+            Microsoft.Office.Interop.Excel.Application excel =
+                new Microsoft.Office.Interop.Excel.Application();
+            Workbook wb;
+            Worksheet ws;
+
+            wb = excel.Workbooks.Open(filePath);
+            ws = wb.Worksheets[7];
+
+            double d = ws.Cells[23, 5].Value;
+            DateTime conv = DateTime.FromOADate(d);
+            string hour = conv.Hour.ToString();
+
+            if (hour.Length == 1)
+                hour = "0" + hour;
+
+            string minute = conv.Minute.ToString();
+            if (minute.Length == 1)
+                minute += "0";
+
+            return new string[] { hour, minute };
+            //MessageBox.Show(hour + " : " + minute);
         }
         private void ReadExcel()
         {
-            string filePath = @"C:\test.xls";
-            Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+            string filePath = @"C:\test.xlsx";
+            Microsoft.Office.Interop.Excel.Application excel = 
+                new Microsoft.Office.Interop.Excel.Application();
             Workbook wb;
             Worksheet ws;
 
             wb = excel.Workbooks.Open(filePath);
             ws = wb.Worksheets[7];
             // [sor, oszlop]
-            MessageBox.Show(Convert.ToString(ws.Cells[8, 2].Value));
-
+            //MessageBox.Show(Convert.ToString(ws.Cells[23, 5].Value));
+            // Kiszállás kezdete pozíció
+            double d = ws.Cells[23, 5].Value;
+            DateTime conv = DateTime.FromOADate(d);
+            string hour = conv.Hour.ToString();
+            if(hour.Length == 1) 
+                hour = "0" + hour;
+            string minute = conv.Minute.ToString();
+            if (minute.Length == 1)
+                minute += "0";
+            //MessageBox.Show(conv.ToString());
+            MessageBox.Show(hour + " : " + minute);
         }
         private void ReadExcel2()
         {
-            string filePath = @"D:\test.xls";
+            string filePath = @"C:\test.xlsx";
             Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
             Workbook wb;
             Worksheet ws;
@@ -39,11 +79,10 @@ namespace ReadExcel
             wb = excel.Workbooks.Open(filePath);
             ws = wb.Worksheets[7];
 
-            Range cell = ws.Range["B15"];
+            Range cell = ws.Range["E23"];
             
-            string CellValue = cell.Value;
- 
-            MessageBox.Show(CellValue);
+            string val = cell.Value.ToString("HH:mm");
+            //MessageBox.Show(cell.GetType());
         }
         private void ReadExcelWithRange()
         {
@@ -75,7 +114,7 @@ namespace ReadExcel
 
             Range cell = ws.Range["B23:H23"];
             List<int> dates = new List<int>();
-
+            MessageBox.Show("Number of cells: " + cell.Count.ToString());
             foreach (int Result in cell.Value)
             {
                 MessageBox.Show(Result.ToString());
