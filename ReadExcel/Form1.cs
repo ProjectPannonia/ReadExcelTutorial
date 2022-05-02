@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Office.Interop.Excel;
 
@@ -18,13 +12,13 @@ namespace ReadExcel
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void read_Click(object sender, EventArgs e)
         {
-            ReadExcelWithRange();
+            ReadExcelWithRangeAndUseWorkdayObj();
         }
         private void ReadExcel()
         {
-            string filePath = @"D:\test.xls";
+            string filePath = @"C:\test.xls";
             Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
             Workbook wb;
             Worksheet ws;
@@ -53,7 +47,7 @@ namespace ReadExcel
         }
         private void ReadExcelWithRange()
         {
-            string filePath = @"D:\test.xls";
+            string filePath = @"C:\test.xlsx";
             Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
             Workbook wb;
             Worksheet ws;
@@ -68,6 +62,28 @@ namespace ReadExcel
             {
                 MessageBox.Show(Result.ToString());
             }
+        }
+        private void ReadExcelWithRangeAndUseWorkdayObj()
+        {
+            string filePath = @"C:\test.xlsx";
+            Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+            Workbook wb;
+            Worksheet ws;
+
+            wb = excel.Workbooks.Open(filePath);
+            ws = wb.Worksheets[7];
+
+            Range cell = ws.Range["B23:D23"];
+            List<int> dates = new List<int>();
+
+            foreach (int Result in cell.Value)
+            {
+                dates.Add(Result);
+            }
+
+
+            Workday workday = new Workday(dates);
+            workday.WriteToConsole();
         }
     }
 }
